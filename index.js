@@ -21,6 +21,7 @@ ldclient.toggle("YOUR_FEATURE_FLAG_KEY", user, false, function(err, showFeature)
     // the code to run if the feature is off 
     console.log("Not showing your feature to " + user.key);
   }
+  ldclient.flush();
+  ldclient.close();
 });
 
-ldclient.close();
