@@ -1,0 +1,9 @@
+{
+  "name": "node-hello",
+  "version": "1.0.0",
+  "description": "Hello LaunchDarkly for Node.js",
+  "main": "index.js",
+  "dependencies": {
+    "ldclient-node": "git://github.com/launchdarkly/node-client.git#6adce92ab6387e19cfb378f0a3840625ca4aae6c"
+  }
+}
