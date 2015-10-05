@@ -1,7 +1,7 @@
 var LaunchDarkly = require('ldclient-node');
 
 // TODO : Enter your LaunchDarkly API key here
-ldclient = LaunchDarkly.init("YOUR_API_KEY", {timeout: 5});
+ldclient = LaunchDarkly.init("YOUR_API_KEY");
 
 user = {
    "firstName":"Bob",
