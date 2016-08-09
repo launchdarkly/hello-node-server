@@ -1,7 +1,7 @@
 var LaunchDarkly = require('ldclient-node');
 
-// TODO : Enter your LaunchDarkly API key here
-ldclient = LaunchDarkly.init("YOUR_API_KEY");
+// TODO : Enter your LaunchDarkly SDK key here
+ldclient = LaunchDarkly.init("YOUR_SDK_KEY");
 
 user = {
    "firstName":"Bob",
@@ -14,7 +14,7 @@ user = {
 
 ldclient.once('ready', function() {
   // TODO : Enter the key for your feature flag here
-  ldclient.toggle("YOUR_FEATURE_FLAG_KEY", user, false, function(err, showFeature) {
+  ldclient.variation("YOUR_FEATURE_FLAG_KEY", user, false, function(err, showFeature) {
     if (showFeature) {
       // application code to show the feature
       console.log("Showing your feature to " + user.key );
