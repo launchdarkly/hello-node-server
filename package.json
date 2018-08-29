@@ -4,6 +4,6 @@
   "description": "Hello LaunchDarkly for Node.js",
   "main": "index.js",
   "dependencies": {
-    "ldclient-node": "5.3.1"
+    "ldclient-node": "5.3.2"
   }
 }
