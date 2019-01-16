@@ -23,6 +23,8 @@ ldclient.once('ready', function() {
       console.log("Not showing your feature to " + user.key);
     }
     ldclient.flush(function() {
+      // Close safely shuts down the client instance and releases all resources associated with the client. 
+      // In most long-running applications, you should not have to call close.
       ldclient.close();
     });
   });
