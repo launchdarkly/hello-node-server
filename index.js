@@ -1,4 +1,4 @@
-var LaunchDarkly = require('ldclient-node');
+var LaunchDarkly = require('launchdarkly-node-server-sdk');
 
 // TODO : Enter your LaunchDarkly SDK key here
 ldclient = LaunchDarkly.init("YOUR_SDK_KEY");
