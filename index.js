@@ -22,8 +22,12 @@ ldclient.once('ready', function() {
       // the code to run if the feature is off 
       console.log("Not showing your feature to " + user.key);
     }
-    ldclient.flush(function() {
-      ldclient.close();
-    });
+
+    // Close the LaunchDarkly SDK to flush all buffered events and close all open connections.
+    //
+    // IMPORTANT: in a real application, this step is something you would only do when the application is
+    // about to quit-- NOT after every call to variation(). The reason that this step is inside the variation
+    // handler is flags cannot be evaluated after the SDK is closed.
+    ldclient.close();
   });
 });
