@@ -1,37 +1,45 @@
 var LaunchDarkly = require('launchdarkly-node-server-sdk');
 
-// TODO : Enter your LaunchDarkly SDK key here
-ldclient = LaunchDarkly.init("YOUR_SDK_KEY");
+// Set sdkKey to your LaunchDarkly SDK key.
+const sdkKey = "asdf";
 
-user = {
-   "firstName":"Bob",
-   "lastName":"Loblaw",
-   "key":"bob@example.com",
-   "custom":{
-      "groups":"beta_testers"
-   }
+// Set featureFlagKey to the feature flag key you want to evaluate.
+const featureFlagKey = "my-boolean-flag";
+
+function showMessage(s) {
+  console.log("*** " + s);
+  console.log("");
+}
+
+if (sdkKey == "") {
+  showMessage("Please edit index.js to set sdkKey to your LaunchDarkly SDK key first");
+  process.exit(1);
+}
+
+const ldClient = LaunchDarkly.init(sdkKey);
+
+// Set up the user properties. This user should appear on your LaunchDarkly users dashboard
+// soon after you run the demo.
+const user = {
+   "key": "example-user-key",
+   "name": "Sandy"
 };
 
-ldclient.once('ready', function() {
-  // TODO : Enter the key for your feature flag here
-  ldclient.variation("YOUR_FEATURE_FLAG_KEY", user, false, function(err, showFeature) {
-    if (showFeature) {
-      // application code to show the feature
-      console.log("Showing your feature to " + user.key );
-    } else {
-      // the code to run if the feature is off 
-      console.log("Not showing your feature to " + user.key);
-    }
+ldClient.waitForInitialization().then(function() {
+  showMessage("SDK successfully initialized!");
+  ldClient.variation(featureFlagKey, user, false, function(err, flagValue) {
+    showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this user");
 
-    // Close the LaunchDarkly SDK, after ensuring that analytics events have been delivered.
-    //
-    // IMPORTANT: in a real application, you would only call close() when the application is
-    // about to quit-- NOT after every call to variation(). The reason that this step is
-    // inside the variation handler is that we want it to happen after the SDK has been
-    // initialized and after the flag has been evaluated. Node.js will not allow the
-    // application to exit as long as the SDK is still running.
-    ldclient.flush(function() {
-      ldclient.close();
+    // Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
+    // events to LaunchDarkly before the program exits. If analytics events are not delivered,
+    // the user properties and flag usage statistics will not appear on your dashboard. In a
+    // normal long-running application, the SDK would continue running and events would be
+    // delivered automatically in the background.
+    ldClient.flush(function() {
+      ldClient.close();
     });
   });
+}).catch(function(error) {
+  showMessage("SDK failed to initialize: " + error);
+  process.exit(1);
 });
