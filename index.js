@@ -1,7 +1,7 @@
 var LaunchDarkly = require('launchdarkly-node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = "";
+const sdkKey = "asdf";
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
 const featureFlagKey = "my-boolean-flag";
@@ -26,8 +26,9 @@ const user = {
 };
 
 ldClient.waitForInitialization().then(function() {
+  showMessage("SDK successfully initialized!");
   ldClient.variation(featureFlagKey, user, false, function(err, flagValue) {
-    showMessage("Feature flag '" + featureFlagKey "' is " + flagValue + " for this user");
+    showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this user");
 
     // Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
     // events to LaunchDarkly before the program exits. If analytics events are not delivered,
@@ -38,4 +39,7 @@ ldClient.waitForInitialization().then(function() {
       ldClient.close();
     });
   });
+}).catch(function(error) {
+  showMessage("SDK failed to initialize: " + error);
+  process.exit(1);
 });
