@@ -1,8 +1,8 @@
-# LaunchDarkly Sample Server-Side Node.js Application
+# LaunchDarkly sample Node.js (server-side) application
 
-We've built a simple console application that demonstrates how LaunchDarkly's SDK works.  Below, you'll find the basic build procedure, but for more comprehensive instructions, you can visit your [Quickstart page](https://app.launchdarkly.com/quickstart#/).
+We've built a simple console application that demonstrates how LaunchDarkly's SDK works.  Below, you'll find the build procedure. For more comprehensive instructions, you can visit your [Quickstart page](https://app.launchdarkly.com/quickstart#/) or the [Node.js (server-side) reference guide](https://docs.launchdarkly.com/sdk/server-side/node-js).
 
-Please note that the LaunchDarkly Server-Side SDK for Node.js is designed primarily for use in multi-user systems such as web servers and applications. It follows the server-side LaunchDarkly model for multi-user contexts. It is not intended for use in desktop and embedded systems applications.
+The LaunchDarkly server-side SDK for Node.js is designed primarily for use in multi-user systems such as web servers and applications. It follows the server-side LaunchDarkly model for multi-user contexts. It is not intended for use in desktop and embedded systems applications.
 
 For a sample application demonstrating how to use LaunchDarkly in *client-side* Node.js applications, refer to our [Client-side Node.js SDK sample application](https://github.com/launchdarkly/hello-node-client).
 
@@ -20,4 +20,4 @@ For a sample application demonstrating how to use LaunchDarkly in *client-side* 
 
 3. Run `node index.js`
 
-You should see the message `"Feature flag '<flag key>' is <true/false> for this user"`.
+You should receive the message `"Feature flag '<flag key>' is <true/false> for this user"`.
