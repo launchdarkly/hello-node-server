@@ -1,7 +1,7 @@
 var LaunchDarkly = require('launchdarkly-node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = "asdf";
+const sdkKey = "";
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
 const featureFlagKey = "my-boolean-flag";
