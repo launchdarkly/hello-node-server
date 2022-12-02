@@ -18,16 +18,17 @@ if (sdkKey == "") {
 
 const ldClient = LaunchDarkly.init(sdkKey);
 
-// Set up the user properties. This user should appear on your LaunchDarkly users dashboard
+// Set up the context properties. This context should appear on your LaunchDarkly contexts dashboard
 // soon after you run the demo.
-const user = {
-   "key": "example-user-key",
-   "name": "Sandy"
+const context = {
+  kind: "user",
+  key: "example-user-key",
+  name: "Sandy"
 };
 
-ldClient.waitForInitialization().then(function() {
+ldClient.waitForInitialization().then(function () {
   showMessage("SDK successfully initialized!");
-  ldClient.variation(featureFlagKey, user, false, function(err, flagValue) {
+  ldClient.variation(featureFlagKey, context, false, function (err, flagValue) {
     showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this user");
 
     // Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
@@ -35,11 +36,11 @@ ldClient.waitForInitialization().then(function() {
     // the user properties and flag usage statistics will not appear on your dashboard. In a
     // normal long-running application, the SDK would continue running and events would be
     // delivered automatically in the background.
-    ldClient.flush(function() {
+    ldClient.flush(function () {
       ldClient.close();
     });
   });
-}).catch(function(error) {
+}).catch(function (error) {
   showMessage("SDK failed to initialize: " + error);
   process.exit(1);
 });
