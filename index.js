@@ -1,4 +1,4 @@
-var LaunchDarkly = require('launchdarkly-node-server-sdk');
+var LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
 const sdkKey = "";
