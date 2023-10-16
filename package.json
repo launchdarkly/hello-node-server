@@ -4,6 +4,6 @@
   "description": "Hello LaunchDarkly for Node.js",
   "main": "index.js",
   "dependencies": {
-    "@launchdarkly/node-server-sdk": ">= 8.0.0"
+    "@launchdarkly/node-server-sdk": ">= 9.0.0"
   }
 }
