@@ -1,18 +1,33 @@
 var LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = "";
+const sdkKey = process.env.LAUNCHDARKLY_SERVER_KEY;
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
-const featureFlagKey = "my-boolean-flag";
+const featureFlagKey = typeof process.env.LAUNCHDARKLY_FLAG_KEY !== "undefined" ? process.env.LAUNCHDARKLY_FLAG_KEY : "sample-feature";
 
-function showMessage(s) {
-  console.log("*** " + s);
-  console.log("");
+const CI = typeof process.env.CI !== "undefined";
+
+function showBanner() {
+  console.log("\n" +
+  "        ██       \n" +
+  "          ██     \n" +
+  "      ████████   \n" +
+  "         ███████ \n" +
+  "██ LAUNCHDARKLY █\n" +
+  "         ███████ \n" +
+  "      ████████   \n" +
+  "          ██     \n" +
+  "        ██       \n")
+}
+
+function printValueAndBanner(_, flagValue) {
+    console.log("*** Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context\n");
+    if(flagValue) showBanner();
 }
 
 if (sdkKey == "") {
-  showMessage("Please edit index.js to set sdkKey to your LaunchDarkly SDK key first");
+  console.log("*** Please edit index.js to set sdkKey to your LaunchDarkly SDK key first\n");
   process.exit(1);
 }
 
@@ -27,20 +42,19 @@ const context = {
 };
 
 ldClient.waitForInitialization().then(function () {
-  showMessage("SDK successfully initialized!");
-  ldClient.variation(featureFlagKey, context, false, function (err, flagValue) {
-    showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context");
+  console.log("*** SDK successfully initialized!\n");
 
-    // Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
-    // events to LaunchDarkly before the program exits. If analytics events are not delivered,
-    // the context properties and flag usage statistics will not appear on your dashboard. In a
-    // normal long-running application, the SDK would continue running and events would be
-    // delivered automatically in the background.
-    ldClient.flush(function () {
-      ldClient.close();
-    });
+  const eventKey = "update:" + featureFlagKey;
+  ldClient.on(eventKey, () => {
+    ldClient.variation(featureFlagKey, context, false, printValueAndBanner)
+  });
+
+  ldClient.variation(featureFlagKey, context, false, function (_, flagValue) {
+    printValueAndBanner(_, flagValue);
+
+    if(CI) process.exit(0);
   });
 }).catch(function (error) {
-  showMessage("SDK failed to initialize: " + error);
+  console.log("*** SDK failed to initialize: " + error + "\n");
   process.exit(1);
 });
