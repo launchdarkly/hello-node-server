@@ -9,16 +9,17 @@ const featureFlagKey = typeof process.env.LAUNCHDARKLY_FLAG_KEY !== "undefined" 
 const CI = typeof process.env.CI !== "undefined";
 
 function showBanner() {
-  console.log("\n" +
-  "        ██       \n" +
-  "          ██     \n" +
-  "      ████████   \n" +
-  "         ███████ \n" +
-  "██ LAUNCHDARKLY █\n" +
-  "         ███████ \n" +
-  "      ████████   \n" +
-  "          ██     \n" +
-  "        ██       \n")
+  console.log(
+`        ██
+          ██
+      ████████
+         ███████
+██ LAUNCHDARKLY █
+         ███████
+      ████████
+          ██
+        ██
+`)
 }
 
 function printValueAndBanner(_, flagValue) {
