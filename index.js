@@ -23,7 +23,7 @@ function showBanner() {
 }
 
 function printValueAndBanner(_, flagValue) {
-    console.log("*** Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context\n");
+    console.log("*** The '" + featureFlagKey + "' feature flag evaluates to " + flagValue + ".\n");
     if(flagValue) showBanner();
 }
 
@@ -38,7 +38,7 @@ const ldClient = LaunchDarkly.init(sdkKey);
 // soon after you run the demo.
 const context = {
   kind: "user",
-  key: "example-context-key",
+  key: "example-user-key",
   name: "Sandy"
 };
 
