@@ -1,18 +1,34 @@
-var LaunchDarkly = require('@launchdarkly/node-server-sdk');
+const LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = "";
+const sdkKey = process.env.LAUNCHDARKLY_SDK_KEY ?? 'your-sdk-key';
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
-const featureFlagKey = "my-boolean-flag";
+const featureFlagKey = process.env.LAUNCHDARKLY_FLAG_KEY ?? 'sample-feature';
 
-function showMessage(s) {
-  console.log("*** " + s);
-  console.log("");
+function showBanner() {
+  console.log(
+    `        ██
+          ██
+      ████████
+         ███████
+██ LAUNCHDARKLY █
+         ███████
+      ████████
+          ██
+        ██
+`,
+  );
 }
 
-if (sdkKey == "") {
-  showMessage("Please edit index.js to set sdkKey to your LaunchDarkly SDK key first");
+function printValueAndBanner(flagValue) {
+  console.log(`*** The '${featureFlagKey}' feature flag evaluates to ${flagValue}.`);
+
+  if (flagValue) showBanner();
+}
+
+if (!sdkKey) {
+  console.log('*** Please edit index.js to set sdkKey to your LaunchDarkly SDK key first.');
   process.exit(1);
 }
 
@@ -21,26 +37,30 @@ const ldClient = LaunchDarkly.init(sdkKey);
 // Set up the context properties. This context should appear on your LaunchDarkly contexts dashboard
 // soon after you run the demo.
 const context = {
-  kind: "user",
-  key: "example-context-key",
-  name: "Sandy"
+  kind: 'user',
+  key: 'example-user-key',
+  name: 'Sandy',
 };
 
-ldClient.waitForInitialization().then(function () {
-  showMessage("SDK successfully initialized!");
-  ldClient.variation(featureFlagKey, context, false, function (err, flagValue) {
-    showMessage("Feature flag '" + featureFlagKey + "' is " + flagValue + " for this context");
+ldClient
+  .waitForInitialization()
+  .then(() => {
+    console.log('*** SDK successfully initialized!');
 
-    // Here we ensure that the SDK shuts down cleanly and has a chance to deliver analytics
-    // events to LaunchDarkly before the program exits. If analytics events are not delivered,
-    // the context properties and flag usage statistics will not appear on your dashboard. In a
-    // normal long-running application, the SDK would continue running and events would be
-    // delivered automatically in the background.
-    ldClient.flush(function () {
-      ldClient.close();
+    const eventKey = `update:${featureFlagKey}`;
+    ldClient.on(eventKey, () => {
+      ldClient.variation(featureFlagKey, context, false).then(printValueAndBanner);
     });
+
+    ldClient.variation(featureFlagKey, context, false).then((flagValue) => {
+      printValueAndBanner(flagValue);
+
+      if(typeof process.env.CI !== "undefined") {
+        process.exit(0);
+      }
+    });
+  })
+  .catch((error) => {
+    console.log(`*** SDK failed to initialize: ${error}`);
+    process.exit(1);
   });
-}).catch(function (error) {
-  showMessage("SDK failed to initialize: " + error);
-  process.exit(1);
-});
