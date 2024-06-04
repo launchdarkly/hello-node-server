@@ -42,25 +42,29 @@ const context = {
   name: 'Sandy',
 };
 
-ldClient
-  .waitForInitialization()
-  .then(() => {
+async function main() {
+  try {
+    await ldClient.waitForInitialization({timeout: 10});
+
     console.log('*** SDK successfully initialized!');
 
     const eventKey = `update:${featureFlagKey}`;
-    ldClient.on(eventKey, () => {
-      ldClient.variation(featureFlagKey, context, false).then(printValueAndBanner);
-    });
-
-    ldClient.variation(featureFlagKey, context, false).then((flagValue) => {
+    ldClient.on(eventKey, async () => {
+      const flagValue = await ldClient.variation(featureFlagKey, context, false);
       printValueAndBanner(flagValue);
-
-      if(typeof process.env.CI !== "undefined") {
-        process.exit(0);
-      }
     });
-  })
-  .catch((error) => {
+
+    const flagValue = await ldClient.variation(featureFlagKey, context, false);
+    printValueAndBanner(flagValue);
+
+    if (typeof process.env.CI !== "undefined") {
+      process.exit(0);
+    }
+  } catch (error) {
     console.log(`*** SDK failed to initialize: ${error}`);
     process.exit(1);
-  });
+  }
+
+}
+
+main();
