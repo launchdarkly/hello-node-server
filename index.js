@@ -32,7 +32,20 @@ if (!sdkKey) {
   process.exit(1);
 }
 
-const ldClient = LaunchDarkly.init(sdkKey);
+// Create a debug level logger to show details of the Data Saving Mode
+const logger = LaunchDarkly.basicLogger({
+  level: 'debug',
+  destination: console.log,
+});
+
+const ldClient = LaunchDarkly.init(sdkKey, {
+  dataSystem: {
+    dataSource: {
+      dataSourceOptionsType: 'standard',
+    }
+  },
+  logger: logger,
+});
 
 // Set up the context properties. This context should appear on your LaunchDarkly contexts dashboard
 // soon after you run the demo.
