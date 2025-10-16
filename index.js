@@ -1,7 +1,7 @@
 const LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = process.env.LAUNCHDARKLY_SDK_KEY ?? 'your-sdk-key';
+const sdkKey = process.env.LAUNCHDARKLY_SDK_KEY ?? 'code-refs-test-flag';
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
 const featureFlagKey = process.env.LAUNCHDARKLY_FLAG_KEY ?? 'sample-feature';
@@ -65,6 +65,9 @@ async function main() {
     process.exit(1);
   }
 
+  ldClient.flagValueChanged("code-refs-test-flag", context, (flagValue) => {
+    console.log('Testing code refs');
+  });
 }
 
 main();
