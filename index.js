@@ -50,11 +50,23 @@ const context = {
   name: 'Sandy',
 };
 
+async function logAllFlags() {
+  const allFlags = await ldClient.allFlagsState(context, { withReasons: true });
+  console.log('*** Full SDK flag payload:');
+  console.log(JSON.stringify(allFlags.toJSON(), null, 2));
+}
+
 async function main() {
   try {
     await ldClient.waitForInitialization({timeout: 10});
 
     console.log('*** SDK successfully initialized!');
+
+    await logAllFlags();
+
+    ldClient.on('update', () => {
+      logAllFlags();
+    });
 
     const eventKey = `update:${featureFlagKey}`;
     ldClient.on(eventKey, async () => {
