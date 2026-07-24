@@ -32,7 +32,15 @@ if (!sdkKey) {
   process.exit(1);
 }
 
-const ldClient = LaunchDarkly.init(sdkKey);
+// Optionally point the SDK at a non-production instance (e.g. staging or a
+// Relay Proxy) by setting these environment variables.
+const options = {
+  ...(process.env.LAUNCHDARKLY_BASE_URI && { baseUri: process.env.LAUNCHDARKLY_BASE_URI }),
+  ...(process.env.LAUNCHDARKLY_STREAM_URI && { streamUri: process.env.LAUNCHDARKLY_STREAM_URI }),
+  ...(process.env.LAUNCHDARKLY_EVENTS_URI && { eventsUri: process.env.LAUNCHDARKLY_EVENTS_URI }),
+};
+
+const ldClient = LaunchDarkly.init(sdkKey, options);
 
 // Set up the context properties. This context should appear on your LaunchDarkly contexts dashboard
 // soon after you run the demo.
