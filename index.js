@@ -1,7 +1,7 @@
 const LaunchDarkly = require('@launchdarkly/node-server-sdk');
 
 // Set sdkKey to your LaunchDarkly SDK key.
-const sdkKey = process.env.LAUNCHDARKLY_SDK_KEY ?? 'your-sdk-key';
+const sdkKey = process.env.LAUNCHDARKLY_SDK_KEY ?? '';
 
 // Set featureFlagKey to the feature flag key you want to evaluate.
 const featureFlagKey = process.env.LAUNCHDARKLY_FLAG_KEY ?? 'sample-feature';
@@ -28,7 +28,7 @@ function printValueAndBanner(flagValue) {
 }
 
 if (!sdkKey) {
-  console.log('*** Please edit index.js to set sdkKey to your LaunchDarkly SDK key first.');
+  console.log('*** Please set LAUNCHDARKLY_SDK_KEY to your LaunchDarkly SDK key, or edit index.js to set sdkKey.');
   process.exit(1);
 }
 
